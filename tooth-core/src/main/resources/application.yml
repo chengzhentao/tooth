@@ -1,0 +1,83 @@
+server:
+   port: 8080
+
+
+spring:
+  datasource:
+    #   数据源基本配置
+    url: jdbc:mysql://localhost:3306/tooth?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  #   数据源其他配置
+    druid:
+      #     配置初始化大小、最小、最大线程数
+      initialSize: 5
+      minIdle: 5
+      #     CPU核数+1，也可以大些但不要超过20，数据库加锁时连接过多性能下降
+      maxActive: 20
+      #     最大等待时间，内网：800，外网：1200（三次握手1s）
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      #     配置一个连接在池中最大空间时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1
+      testWhileIdle: true
+      #     设置从连接池获取连接时是否检查连接有效性，true检查，false不检查
+      testOnBorrow: true
+      #     设置从连接池归还连接时是否检查连接有效性，true检查，false不检查
+      testOnReturn: true
+      #     可以支持PSCache（提升写入、查询效率）
+      poolPreparedStatements: true
+      #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall,log4j
+      #     保持长连接
+      keepAlive: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+  redis:
+      # Redis服务器地址
+      host: 127.0.0.1
+      # Redis服务器连接端口
+      port: 6379
+      # Redis服务器连接密码（默认为空）
+      # password:
+      # 连接超时时间
+      timeout: 10s
+      lettuce:
+          pool:
+              # 连接池最大连接数
+              max-active: 200
+              # 连接池最大阻塞等待时间（使用负值表示没有限制）
+              max-wait: -1ms
+              # 连接池中的最大空闲连接
+              max-idle: 10
+              # 连接池中的最小空闲连接
+              min-idle: 0
+
+sa-token:
+    # token名称 (同时也是cookie名称)
+    token-name: token
+    # token有效期，单位s 默认30天, -1代表永不过期
+    timeout: 2592000
+    # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+    activity-timeout: -1
+    # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+    is-concurrent: true
+    # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+    is-share: false
+    # token风格
+    token-style: uuid
+    # 是否输出操作日志
+    is-log: false
+
+#log 信息配置
+logging:
+  level:
+    root: info
+  file:
+    path: /Users/chengzhentao/workspace/tooth/logs
+
